@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import {Redirect} from 'react-router-dom'
 
 import Cookies from 'js-cookie'
 
@@ -59,7 +60,9 @@ class Login extends Component {
   }
 
   onSuccessLogin = Token => {
+    const {history} = this.props
     Cookies.set('jwt_token', Token, {expires: 30})
+    history.replace('/')
   }
 
   onFailureLogin = ErrorMsg => {
@@ -91,6 +94,10 @@ class Login extends Component {
 
   render() {
     const {showSubmitError, errorMsg} = this.state
+    const Token = Cookies.get('jwt_token')
+    if (Token !== undefined) {
+      return <Redirect to="/" />
+    }
     return (
       <div className="jobby-bg-container">
         <div className="jobby-login-card-container">
